@@ -60,3 +60,47 @@ const propertyList = [
         image: "assets/images/property10.jpg"
     }
 ];
+
+// Função para gerar o HTML de um imóvel
+function generatePropertyHTML(property) {
+    return `
+        <div class="property-card">
+            <img src="${property.image}" alt="${property.description}">
+            <div class="property-description">${property.description}</div>
+            <div class="property-category">${property.category}</div>
+            <div class="property-price">R$ ${property.price.toLocaleString('pt-BR')}</div>
+        </div>
+    `;
+}
+
+// Função para exibir os imóveis na página
+function displayProperties(properties) {
+    const propertyListContainer = document.querySelector('.property-list');
+    propertyListContainer.innerHTML = ''; // Limpa a lista antes de adicionar novos imóveis
+
+    properties.forEach(property => {
+        const propertyHTML = generatePropertyHTML(property);
+        propertyListContainer.innerHTML += propertyHTML; // Adiciona cada imóvel à lista
+    });
+}
+
+// Função para filtrar os imóveis por categoria
+function filterProperties(category) {
+    if (category === 'todos') {
+        displayProperties(propertyList);
+    } else {
+        // Filtra imóveis pela categoria selecionada, assegurando que a comparação seja insensível a maiúsculas/minúsculas
+        const filteredProperties = propertyList.filter(property => property.category.toLowerCase() === category.toLowerCase());
+        displayProperties(filteredProperties);
+    }
+}
+
+// Exibindo todos os imóveis inicialmente
+displayProperties(propertyList);
+
+// Adicionando o evento para o filtro de categoria
+const categorySelect = document.querySelector('#category-select');
+categorySelect.addEventListener('change', (event) => {
+    const category = event.target.value;
+    filterProperties(category);
+});
